@@ -52,6 +52,29 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result);
         });
+
+        // CRUD - Update setup
+        app.get('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const user = await userCollection.findOne(query);
+            res.send(user);
+        })
+
+        app.put('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const user = req.body;
+            const option = { upsert: true };
+            const updatedUser = {
+                $set: {
+                    title: user.title,
+                    desc: user.desc
+                }
+            }
+            const result = await userCollection.updateOne(filter, updatedUser, option);
+            res.send(result);
+        })
     }
 
     finally {
