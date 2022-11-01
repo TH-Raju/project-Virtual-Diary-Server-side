@@ -23,9 +23,20 @@ const uri = "mongodb+srv://virtual-diary:azGf75Mwdar4gF7F@cluster0.ddpko0x.mongo
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 async function run() {
+
+
     try {
         const userCollection = client.db('virtualDiary').collection('users');
 
+        // CRUD - Read setup
+        app.get('/users', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
+        });
+
+        // CRUD - create setup
         app.post('/users', async (req, res) => {
             const user = req.body;
             console.log(user);
