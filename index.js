@@ -16,7 +16,7 @@ app.use(express.json())
 // pass:  azGf75Mwdar4gF7F
 
 
-
+// MongoDB Connection
 
 
 const uri = "mongodb+srv://virtual-diary:azGf75Mwdar4gF7F@cluster0.ddpko0x.mongodb.net/?retryWrites=true&w=majority";
@@ -25,12 +25,13 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const userCollection = client.db('virtualDiary').collection('users');
-        const user = {
-            name: 'testing mongo',
-            email: 'aaa@mail.com'
-        }
-        const result = await userCollection.insertOne(user);
-        console.log(result);
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            console.log(user);
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        })
     }
     finally {
 
